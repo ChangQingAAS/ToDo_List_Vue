@@ -2,16 +2,13 @@
 	<div id="root">
 		<div class="todo-container">
 			<div class="todo-wrap">
-				<MyHeader :addTodo="addTodo"></MyHeader>
-				<MyList
-					:checkTodo="checkTodo"
-					:deleteTodo="deleteTodo"
-					:todos="todos">
+				<MyHeader @addTodo="addTodo"></MyHeader>
+				<MyList :todos="todos">
 				</MyList>
 				<MyFooter
-					:checkAllTodo="checkAllTodo"
-					:clearAllTodo="clearAllTodo"
 					:todos="todos"
+					@checkAllTodo="checkAllTodo"
+					@clearAllTodo="clearAllTodo"
 				></MyFooter>
 			</div>
 		</div>
@@ -21,6 +18,7 @@
 
 <script>
 //引入组件
+import pubsub from 'pubsub-js'
 import MyHeader from '@/components/MyHeader.vue'
 import MyList from '@/components/MyList.vue'
 import MyFooter from '@/components/MyFooter.vue'
@@ -34,12 +32,26 @@ export default {
 	},
 	data () {
 		return {
-			todos: [
-				{ id: '001', title: '抽烟', done: true },
-				{ id: '002', title: '喝酒', done: true },
-				{ id: '003', title: '开车', done: false },
-			],
+			todos: JSON.parse(localStorage.getItem('todos')) || []
 		}
+	},
+	watch: {
+		todos: {
+			deep: true,
+			handler (value) {
+				localStorage.setItem('todos', JSON.stringify(value))
+			}
+		}
+	},
+	mounted () {
+		this.$bus.$on('checkTodo', this.checkTodo)
+		this.$bus.$on('updateTodo', this.updateTodo)
+		this.pubId = pubsub.subscribe('deleteTodo', this.deleteTodo)
+	},
+	beforeDestroy () {
+		this.$bus.off('checkTodo')
+		this.$bus.off('updateTodo')
+		pubsub.unsubscribe(this.pubId)
 	},
 	methods: {
 		// 添加一个todo
@@ -55,8 +67,16 @@ export default {
 				}
 			})
 		},
+		// 修改todo对象的title
+		updateTodo (id, value) {
+			this.todos.forEach((todo) => {
+				if (todo.id === id) {
+					todo.title = value
+				}
+			})
+		},
 		// 删除todo对象的勾选
-		deleteTodo (id) {
+		deleteTodo (_, id) {
 			this.todos = this.todos.filter((todo) => {
 				return todo.id !== id
 			})
@@ -77,7 +97,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 /*base*/
 body {
 	background: #fff;
@@ -100,6 +120,13 @@ body {
 	color: #fff;
 	background-color: #da4f49;
 	border: 1px solid #bd362f;
+}
+
+.btn-edit {
+	color: #fff;
+	background-color: skyblue;
+	border: 1px solid deepskyblue;
+	margin-right: 5px;
 }
 
 .btn-danger:hover {

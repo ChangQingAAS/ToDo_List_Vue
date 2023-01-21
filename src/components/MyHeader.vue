@@ -18,13 +18,12 @@ export default {
 			title: ''
 		}
 	},
-	props: [
-		'addTodo',
-	],
 	methods: {
 		add (e) {
 			// 校验数据
-			if (!this.title.trim()) return alert('输入不能为空！')
+			if (!this.title.trim()) {
+				return alert('输入不能为空！')
+			}
 			// 将用户的输入包装成一个输入todo对象
 			const todoObj = {
 				id: nanoid(),
@@ -34,7 +33,7 @@ export default {
 			// 清空输入
 			this.title = ''
 			// 通知APP组件去添加一个todo对象
-			this.addTodo(todoObj)
+			this.$emit('addTodo', todoObj)
 		}
 	}
 }
