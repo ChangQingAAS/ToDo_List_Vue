@@ -1,7 +1,8 @@
 <template>
 	<div class="todo-header">
 		<input v-model="title"
-		       placeholder="请输入你的任务名称，按回车键确认"
+		       autofocus="autofocus"
+		       placeholder="What to do?"
 		       type="text"
 		       @keyup.enter="add"/>
 	</div>
@@ -9,7 +10,6 @@
 
 <script>
 import { nanoid } from 'nanoid'
-import { trim } from 'core-js/internals/string-trim'
 
 export default {
 	name: 'MyHeader',
@@ -19,7 +19,7 @@ export default {
 		}
 	},
 	methods: {
-		add (e) {
+		add () {
 			// 校验数据
 			if (!this.title.trim()) {
 				return alert('输入不能为空！')
@@ -43,8 +43,8 @@ export default {
 /*header*/
 .todo-header input {
 	width: 560px;
-	height: 28px;
-	font-size: 14px;
+	height: 30px;
+	font-size: 18px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	padding: 4px 7px;

@@ -1,13 +1,10 @@
 <template>
 	<div v-show="total" class="todo-footer">
 		<label>
-			<input v-model="isAll"
-			       type="checkbox"/>
+			<input v-model="isAll" type="checkbox" class="toggle"/>
+			<span>{{ doneTotal }} Done / {{ total }} All</span>
 		</label>
-		<span>
-          <span>已完成{{ doneTotal }}</span> / 全部{{ total }}
-        </span>
-		<button class="btn btn-danger" @click="clearAll">清除已完成任务</button>
+		<button class="btn btn-danger" @click="clearAll">Clear All Todos</button>
 	</div>
 </template>
 
@@ -58,6 +55,11 @@ export default {
 	margin-top: 5px;
 }
 
+.todo-footer span {
+	color: orangered;
+	font-size: 16px;
+}
+
 .todo-footer label {
 	display: inline-block;
 	margin-right: 20px;
@@ -76,4 +78,14 @@ export default {
 	margin-top: 5px;
 }
 
+.toggle {
+	margin: auto 0;
+	appearance: none;
+}
+.toggle:after {
+	content: url("../assets/unChecked.svg");
+}
+.toggle:checked:after {
+	content: url("../assets/checked.svg");
+}
 </style>

@@ -1,10 +1,10 @@
 <template>
 	<div id="root">
+		<Name></Name>
 		<div class="todo-container">
 			<div class="todo-wrap">
 				<MyHeader @addTodo="addTodo"></MyHeader>
-				<MyList :todos="todos">
-				</MyList>
+				<MyList :todos="todos"></MyList>
 				<MyFooter
 					:todos="todos"
 					@checkAllTodo="checkAllTodo"
@@ -12,6 +12,7 @@
 				></MyFooter>
 			</div>
 		</div>
+		<Writer></Writer>
 	</div>
 
 </template>
@@ -22,10 +23,14 @@ import pubsub from 'pubsub-js'
 import MyHeader from '@/components/MyHeader.vue'
 import MyList from '@/components/MyList.vue'
 import MyFooter from '@/components/MyFooter.vue'
+import Writer from '@/components/Writer.vue'
+import Name from '@/components/Name.vue'
 
 export default {
 	name: 'App',
 	components: {
+		Name,
+		Writer,
 		MyFooter,
 		MyHeader,
 		MyList
@@ -141,6 +146,7 @@ body {
 .todo-container {
 	width: 600px;
 	margin: 0 auto;
+	box-shadow: 0 0 5px #666;
 }
 
 .todo-container .todo-wrap {

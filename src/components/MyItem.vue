@@ -5,11 +5,14 @@
 				<input :checked="todo.done"
 				       type="checkbox"
 				       @change="handleCheck(todo.id)"/>
-				<span v-show="!todo.isEdit">{{ todo.title }}</span>
+				<span v-show="!todo.isEdit"
+				      :style="todo.done==true ? 'color: #d9d900; text-decoration: line-through' : '' "
+				>{{ todo.title }}</span>
 				<input
 					v-show="todo.isEdit"
 					ref="inputTitle"
 					:value="todo.title"
+					style="color: skyblue"
 					type="text"
 					@blur="handleBlur(todo,$event)">
 			</label>
@@ -67,15 +70,16 @@ export default {
 /*item*/
 li {
 	list-style: none;
-	height: 36px;
-	line-height: 36px;
-	padding: 0 5px;
+	height: 40px;
+	line-height: 40px;
 	border-bottom: 1px solid #ddd;
+	font-size: 24px;
 }
 
 li label {
 	float: left;
 	cursor: pointer;
+	color: red;
 }
 
 li label li input {
